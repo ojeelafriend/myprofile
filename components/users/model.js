@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const mySchema = new Schema({
-	user: {
+	username: {
 		type: String,
 		require: true,
 	},
@@ -10,7 +10,10 @@ const mySchema = new Schema({
 		type: String,
 		require: true,
 	},
-	creation: Date,
+	creation: {
+		type: Date,
+		require: true,
+	},
 });
 
 const model = mongoose.model('Users', mySchema);
