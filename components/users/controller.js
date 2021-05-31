@@ -1,15 +1,12 @@
 const db = require('./store');
 const bcrypt = require('bcrypt');
 
+// guardar json en mongo de la forma correspondiente.
 function register(username, password, confirmPassword) {
 	return new Promise(async (resolve, reject) => {
-		const userExists = await db.search(username);
-
+		console.log(username);
 		if (!username || !password || !confirmPassword) {
 			reject('Error, insert data...');
-		}
-		if (username == userExists.username) {
-			reject('This user already exists');
 		} else {
 			let fails = [];
 			if (username.length < 5) {
@@ -37,7 +34,6 @@ function register(username, password, confirmPassword) {
 					password: hashedPassword,
 					creation: new Date(),
 				};
-
 				db.add(user);
 				resolve('User register successfully');
 			}
@@ -47,15 +43,15 @@ function register(username, password, confirmPassword) {
 
 function auth(username, password) {
 	return new Promise(async (resolve, reject) => {
-		const userExists = await db.search(username).catch((e) => {
-			console.log('Error in store' + e);
-		});
-		let validatePassword = bcrypt.compareSync(password, userExists.password);
-
-		if (!validatePassword || username != userExists.username) {
-			reject('Username or password invalid');
+		const userExists = await db.search(username);
+		if (userExists == null) {
+			reject(false);
 		} else {
-			resolve('Welcome ' + username);
+			let value = bcrypt.compareSync(password, userExists.password);
+			if (value && username === userExists.username) {
+				return resolve(userExists);
+			}
+			reject(false);
 		}
 	});
 }

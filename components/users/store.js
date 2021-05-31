@@ -5,9 +5,10 @@ function addUser(user) {
 	myUser.save();
 }
 async function searchUser(username) {
-	User = await Model.findOne({
+	const User = await Model.findOne({
 		username: username,
 	});
+	console.log(User);
 	return User;
 }
 module.exports = {
