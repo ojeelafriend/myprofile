@@ -10,7 +10,13 @@ router.post('/', (req, res) => {
 			talkResponse.success(req, res, notice, 201);
 		})
 		.catch((e) => {
-			talkResponse.errors(req, res, 'Error data', 500, e);
+			//trabajar el catch para asociarlo a una respuesta visual y no
+			//mediante estados, etc...
+			if (!e) {
+				talkResponse.errors(req, res, 'User already exist', 400, e);
+			} else {
+				talkResponse.errors(req, res, 'Error data', 500, e);
+			}
 		});
 });
 
